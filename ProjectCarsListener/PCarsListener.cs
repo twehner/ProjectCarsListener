@@ -21,7 +21,12 @@ namespace ProjectCarsListener
         public ProjectCarsListener(int port = 5606)
         {
             _port = port;
-            _udpClient = new UdpClient(port);
+            _udpClient = new UdpClient()
+            {
+                ExclusiveAddressUse = false
+            };
+            _udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            _udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, _port));
         }
 
         public void Start()
